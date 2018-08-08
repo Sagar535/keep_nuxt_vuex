@@ -62,8 +62,6 @@
 </template>
 
 <script>
-  // import * as noteStore from '~/store/notes.js'
-  // import { mapMutations } from 'vuex'
   import { mapState, mapMutations } from 'vuex'
 
   export default {

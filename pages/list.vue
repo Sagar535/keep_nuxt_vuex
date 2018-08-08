@@ -29,7 +29,7 @@
                 <v-layout column align-center>
                     <v-btn
                             v-if="add"
-                            v-on:click="addNote"
+                            v-on:click="addList"
                     >
                         Add
                     </v-btn>
@@ -61,8 +61,8 @@
                     v-for="(note, index) in notes"
                     :key = index
             >
-                <h2>{{ note.title }}</h2>
-                <h3 v-for="item in note.list">
+                <h3 v-for="item in note">
+                    <h2>{{ item.title }}</h2>
                     <input type="checkbox">{{ item.text }}
                 </h3>
                 <v-btn
@@ -79,22 +79,24 @@
 </template>
 
 <script>
+  import { mapState, mapMutations } from 'vuex'
+
   export default {
     data () {
       return {
         current_text: '',
         current_title: '',
         current_item: '',
-        add: false,
 
-        current_list: [],
-        notes: []
+        current_list: []
       }
     },
     methods: {
-      displayAddButton: function () {
-        this.add = true
-      },
+      ...mapMutations({
+        displayAddButton: 'list/addButton',
+        addNote: 'list/addNote',
+        removeNote: 'list/removeNote'
+      }),
 
       removeAddButton: function () {
         this.add = false
@@ -114,32 +116,20 @@
         console.log(this.current_list)
       },
 
-      addNote: function () {
-        if (this.current_text.trim().length > 0) {
-          this.current_list.push({
-            title: this.current_title,
-            text: this.current_text,
-            done: false
-          })
-        }
+      addList () {
         if (this.current_list.length > 0) {
-          this.notes.push({
-            list: this.current_list,
-            title: this.current_title
-          })
+          this.addNote(this.current_list)
+          this.current_list = []
         }
-
+        if (this.current_text.length > 0) {
+          this.addNote([{
+            'text': this.current_text,
+            'title': this.current_title
+          }])
+        }
         this.current_text = ''
         this.current_title = ''
-        this.current_list = []
-
-        console.log(this.notes)
-      },
-
-      removeNote: function (index) {
-        this.notes.splice(index, 1)
       }
-
     },
     computed: {
       isCurrentListempty: function () {
@@ -148,7 +138,12 @@
         } else {
           return true
         }
-      }
+      },
+
+      ...mapState({
+        add: state => state.list.add,
+        notes: state => state.list.notes
+      })
     }
   }
 </script>
@@ -175,5 +170,3 @@
         width: 50%;
     }
 </style>
-
-
