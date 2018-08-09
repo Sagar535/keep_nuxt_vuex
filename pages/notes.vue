@@ -71,6 +71,9 @@
         current_title: ''
       }
     },
+    created () {
+      this.$store.commit('notes/initializeState')
+    },
     computed: mapState({
       add: state => state.notes.add,
       notes: state => state.notes.notes

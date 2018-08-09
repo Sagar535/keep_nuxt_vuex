@@ -91,6 +91,9 @@
         current_list: []
       }
     },
+    created () {
+      this.$store.commit('list/initializeState')
+    },
     methods: {
       ...mapMutations({
         displayAddButton: 'list/addButton',
