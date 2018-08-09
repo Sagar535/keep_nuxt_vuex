@@ -45,7 +45,7 @@
                     width = "150px"
             >
                 <ul>
-                    <li v-for="item in current_list">
+                    <li v-for="item in current_list.note">
                         <h3 >
                             <input type="checkbox">{{ item.text }}
                         </h3>
@@ -61,9 +61,10 @@
                     v-for="(note, index) in notes"
                     :key = index
             >
-                <h3 v-for="item in note">
-                    <h2>{{ item.title }}</h2>
-                    <input type="checkbox">{{ item.text }}
+
+                <h2>{{ note.title }}</h2>
+                <h3 v-for="item in note.note">
+                    <input type="checkbox" v-model="item.done" > <strike v-if="item.done">{{item.text}}</strike> <span v-else>{{item.text}}</span>
                 </h3>
                 <v-btn
                         color="error"
@@ -88,7 +89,10 @@
         current_title: '',
         current_item: '',
 
-        current_list: []
+        current_list: {
+          'title': '',
+          'note': []
+        }
       }
     },
     created () {
@@ -107,8 +111,7 @@
 
       addItem: function () {
         if (this.current_text.trim().length > 0) {
-          this.current_list.push({
-            title: this.current_title,
+          this.current_list.note.push({
             text: this.current_text,
             done: false
           })
@@ -120,15 +123,23 @@
       },
 
       addList () {
-        if (this.current_list.length > 0) {
-          this.addNote(this.current_list)
-          this.current_list = []
-        }
+        console.log('In add List')
         if (this.current_text.length > 0) {
-          this.addNote([{
+          console.log('current text exists')
+          this.current_list.note.push({
             'text': this.current_text,
-            'title': this.current_title
-          }])
+            'done': false
+          })
+          console.log('pushing done')
+          this.current_list.title = this.current_title
+        }
+        if (this.current_list.note.length > 0) {
+          console.log('Current list not empty')
+          this.addNote(this.current_list)
+          this.current_list = {
+            'title': '',
+            'note': []
+          }
         }
         this.current_text = ''
         this.current_title = ''
@@ -136,7 +147,7 @@
     },
     computed: {
       isCurrentListempty: function () {
-        if (this.current_list.length > 0) {
+        if (this.current_list.note.length > 0) {
           return false
         } else {
           return true

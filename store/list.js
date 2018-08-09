@@ -1,6 +1,6 @@
 export const state = () => ({
   add: false,
-  notes: []
+  notes: [] // notes = [ [{ 'text': Task, 'title': Title, 'done': false },...] ]
 })
 
 export const mutations = {
