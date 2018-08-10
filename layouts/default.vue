@@ -35,6 +35,7 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <nuxt-link to="/notes"><v-btn round>Notes</v-btn></nuxt-link>
       <nuxt-link to="/list"><v-btn round>Lists</v-btn></nuxt-link>
+      <nuxt-link to="/news"><v-btn round>News</v-btn></nuxt-link>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-content>
